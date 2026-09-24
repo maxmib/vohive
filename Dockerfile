@@ -13,14 +13,14 @@ WORKDIR /app
 
 # 启用 Go 工具链自动下载
 ENV GOTOOLCHAIN=auto
-ENV GOPRIVATE=github.com/iniwex5/*
-ENV GONOSUMDB=github.com/iniwex5/*
+ENV GOPRIVATE=github.com/maxmib/*
+ENV GONOSUMDB=github.com/maxmib/*
 
 # 安装构建依赖
 RUN apk add --no-cache git
 
 # 配置 Git 以支持拉取私有库
-RUN if [ -n "${GH_PAT}" ]; then git config --global url."https://x-access-token:${GH_PAT}@github.com/iniwex5/".insteadOf "https://github.com/iniwex5/"; fi
+RUN if [ -n "${GH_PAT}" ]; then git config --global url."https://x-access-token:${GH_PAT}@github.com/maxmib/".insteadOf "https://github.com/maxmib/"; fi
 
 # 复制 go mod 文件
 COPY go-4gproxy/go.mod go-4gproxy/go.sum ./
@@ -41,7 +41,7 @@ RUN ls -la internal/web/dist/ && echo "Frontend assets copied successfully"
 RUN go mod tidy
 RUN VERSION=$(git describe --tags --always --dirty || echo "unknown") && \
     BUILD_TIME=$(date "+%Y-%m-%d %H:%M:%S") && \
-    CGO_ENABLED=0 GOOS=linux go build -trimpath -buildvcs=false -tags "with_utls nomsgpack" -ldflags "-s -w -X 'github.com/iniwex5/vohive/internal/global.Version=${VERSION}' -X 'github.com/iniwex5/vohive/internal/global.BuildTime=${BUILD_TIME}'" -o vo-hive ./cmd/vohive
+    CGO_ENABLED=0 GOOS=linux go build -trimpath -buildvcs=false -tags "with_utls nomsgpack" -ldflags "-s -w -X 'github.com/maxmib/vohive/internal/global.Version=${VERSION}' -X 'github.com/maxmib/vohive/internal/global.BuildTime=${BUILD_TIME}'" -o vo-hive ./cmd/vohive
 
 # 运行阶段 (Runtime)
 FROM alpine:latest
